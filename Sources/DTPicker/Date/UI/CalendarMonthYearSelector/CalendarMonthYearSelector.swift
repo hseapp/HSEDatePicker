@@ -2,6 +2,7 @@ import UIKit
 
 protocol CalendarMonthYearSelector: ConfigurableView {
     var mediator: MonthChangeMediator? { set get }
+    var delegate: ShowMonthYearPickerDelegate? { set get }
     
     func setCalendarData(_ data: CalendarData)
     func scrollToMonth(_ date: CDate?, animated: Bool)
@@ -13,6 +14,8 @@ class CalendarMonthYearSelectorView: UIView, CalendarMonthYearSelector {
     
     weak var mediator: MonthChangeMediator?
     
+    weak var delegate: ShowMonthYearPickerDelegate?
+    
     private var data: CalendarData
     
     private var numberOfYears: Int = 0
@@ -20,6 +23,13 @@ class CalendarMonthYearSelectorView: UIView, CalendarMonthYearSelector {
     private var selectedRows: [Int] = [0, 0]
     
     private let datePicker = UIPickerView()
+    
+    let doneButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(NSLocalizedString("dt_picker.done", comment: ""), for: .normal)
+        button.backgroundColor = .clear
+        return button
+    }()
     
     init() {
         data = .default
@@ -34,11 +44,18 @@ class CalendarMonthYearSelectorView: UIView, CalendarMonthYearSelector {
     }
     
     private func commonInit() {
+        addSubview(doneButton)
+        doneButton.bottom(10)
+        doneButton.centerHorizontally()
+        
         addSubview(datePicker)
-        datePicker.stickToSuperviewEdges(.all)
+        datePicker.stickToSuperviewEdges([.left, .right, .top])
+        datePicker.bottom(10, to: doneButton)
         
         datePicker.dataSource = self
         datePicker.delegate = self
+        
+        doneButton.addTarget(self, action: #selector(hideMonthYearPicker), for: .touchUpInside)
         
         datePicker.reloadAllComponents()
     }
@@ -67,6 +84,7 @@ class CalendarMonthYearSelectorView: UIView, CalendarMonthYearSelector {
     
     func updateConfig(new config: DTConfig) {
         self.config = config
+        doneButton.setTitleColor(config.color, for: .normal)
     }
     
     private func dateForComponents(_ components: [Int]? = nil) -> CDate {
@@ -74,6 +92,10 @@ class CalendarMonthYearSelectorView: UIView, CalendarMonthYearSelector {
         let numberOfMonths = rows[1] * 12 + (rows[0] + 1) - data.minDate.month
         let date = data.minDate.addingMonths(numberOfMonths)
         return date
+    }
+    
+    @objc private func hideMonthYearPicker() {
+        delegate?.hideMonthYearPicker()
     }
     
 }

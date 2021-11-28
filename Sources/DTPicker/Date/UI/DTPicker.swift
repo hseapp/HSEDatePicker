@@ -113,6 +113,7 @@ public class DTPicker: UIView, DatePickerProtocol {
         calendarView.mediator = self
         calendarView.datePickerDelegate = self
         monthYearSelectorView.mediator = self
+        monthYearSelectorView.delegate = self
     }
     
     private func getCalendarData() -> CalendarData {
@@ -168,10 +169,12 @@ extension DTPicker: ShowMonthYearPickerDelegate {
     
     func showMonthYearPicker() {
         changeMonthYearPickerState(for: .visible)
+        headerView.showYearPickerView.isSelected = true
     }
     
     func hideMonthYearPicker() {
         changeMonthYearPickerState(for: .hidden)
+        headerView.showYearPickerView.isSelected = false
     }
     
 }

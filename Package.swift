@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "DTPicker",
+    name: "HSEDatePicker",
     platforms: [
         .iOS(.v13),
         .macOS(.v11)

@@ -6,7 +6,7 @@ protocol ShowMonthYearPickerDelegate: AnyObject {
 }
 
 protocol ShowYearPicker: ConfigurableView {
-    var isSelected: Bool { get }
+    var isSelected: Bool { set get }
     var delegate: ShowMonthYearPickerDelegate? { set get }
     
     func setTitleText(_ text: String)
@@ -15,7 +15,9 @@ protocol ShowYearPicker: ConfigurableView {
 
 class ShowYearPickerView: UIView, ShowYearPicker {
     
-    private(set) var isSelected: Bool = false
+    var isSelected: Bool = false {
+        didSet { updateUI() }
+    }
     
     private(set) var config: DTConfig?
     
@@ -64,6 +66,7 @@ class ShowYearPickerView: UIView, ShowYearPicker {
         } else {
             monthName.textColor = .label
         }
+        animateImageRotation()
     }
     
     private func animateImageRotation() {
@@ -83,13 +86,10 @@ class ShowYearPickerView: UIView, ShowYearPicker {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        isSelected.toggle()
-        updateUI()
-        animateImageRotation()
         if isSelected {
-            delegate?.showMonthYearPicker()
-        } else {
             delegate?.hideMonthYearPicker()
+        } else {
+            delegate?.showMonthYearPicker()
         }
     }
     
