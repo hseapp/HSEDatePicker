@@ -25,6 +25,7 @@ class CalendarDayCell: UICollectionViewCell, CalendarDay {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20)
         label.textAlignment = .center
+        label.accessibilityHint = "This is a date. Press to select"
         return label
     }()
     
@@ -54,6 +55,8 @@ class CalendarDayCell: UICollectionViewCell, CalendarDay {
         
         contentView.clipsToBounds = false
         view.clipsToBounds = false
+        accessibilityHint = "A date"
+        isAccessibilityElement = true
     }
     
     override func layoutSubviews() {
@@ -91,6 +94,7 @@ class CalendarDayCell: UICollectionViewCell, CalendarDay {
         } else {
             self.state = .none
         }
+        accessibilityLabel = "You selected: \(date?.day), \(date?.month)"
         updateUI()
     }
     
