@@ -21,6 +21,9 @@ class ChangeMonthButtonsView: UIView, ChangeMonthButtons {
         let button = UIButton()
         button.tag = -1
         button.setBackgroundImage(UIImage(systemName: "chevron.left"), for: .normal)
+        button.isAccessibilityElement = true
+        button.accessibilityTraits = [.button]
+        button.accessibilityLabel = NSLocalizedString("dt_picker.previous_month", comment: "")
         return button
     }()
     
@@ -28,6 +31,9 @@ class ChangeMonthButtonsView: UIView, ChangeMonthButtons {
         let button = UIButton()
         button.tag = 1
         button.setBackgroundImage(UIImage(systemName: "chevron.right"), for: .normal)
+        button.isAccessibilityElement = true
+        button.accessibilityTraits = [.button]
+        button.accessibilityLabel = NSLocalizedString("dt_picker.next_month", comment: "")
         return button
     }()
     

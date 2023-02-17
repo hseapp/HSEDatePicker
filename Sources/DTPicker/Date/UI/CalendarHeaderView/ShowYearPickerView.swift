@@ -43,6 +43,7 @@ class ShowYearPickerView: UIView, ShowYearPicker {
         
         updateUI()
         commonInit()
+        accessibilityTraits = [.button]
     }
     
     required init?(coder: NSCoder) {
@@ -83,6 +84,7 @@ class ShowYearPickerView: UIView, ShowYearPicker {
     
     func setTitleText(_ text: String) {
         monthName.text = text
+        accessibilityLabel = text
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

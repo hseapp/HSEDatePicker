@@ -17,6 +17,7 @@ class WeekDaysView: Weekdays {
     init() {
         super.init(frame: .zero)        
         commonInit()
+        accessibilityElementsHidden = true
     }
     
     required init?(coder: NSCoder) {
