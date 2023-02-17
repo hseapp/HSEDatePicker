@@ -29,7 +29,7 @@ class CalendarView: UIView, DPCalendar {
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let cv = AccessibleCollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .clear
         cv.isPagingEnabled = true
         cv.showsHorizontalScrollIndicator = false
@@ -73,9 +73,6 @@ class CalendarView: UIView, DPCalendar {
     }
     
     func scrollToMonth(_ date: CDate, animated: Bool = true) {
-        if UIAccessibility.isVoiceOverRunning {
-            return
-        }
         guard let ip = indexPath(for: date) else { return }
         collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: animated)
         mediator?.didChangeMonth(date)
@@ -96,6 +93,16 @@ class CalendarView: UIView, DPCalendar {
         scrollToMonth(data.selectedDateOrToday, animated: false)
     }
     
+}
+
+final class AccessibleCollectionView: UICollectionView {
+    override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
+        if UIAccessibility.isVoiceOverRunning && contentOffset.x == 0 && contentOffset.y == 0 {
+            return
+        }
+        
+        super.setContentOffset(contentOffset, animated: animated)
+    }
 }
 
 extension CalendarView: UICollectionViewDataSource {

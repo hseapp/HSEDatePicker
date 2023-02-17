@@ -25,7 +25,6 @@ class CalendarDayCell: UICollectionViewCell, CalendarDay {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20)
         label.textAlignment = .center
-        label.accessibilityHint = "This is a date. Press to select"
         return label
     }()
     
@@ -55,8 +54,7 @@ class CalendarDayCell: UICollectionViewCell, CalendarDay {
         
         contentView.clipsToBounds = false
         view.clipsToBounds = false
-        accessibilityHint = "A date"
-        isAccessibilityElement = true
+        accessibilityTraits = [.button]
     }
     
     override func layoutSubviews() {
@@ -84,17 +82,22 @@ class CalendarDayCell: UICollectionViewCell, CalendarDay {
     func update(date: CDate?, data: CalendarData) {
         self.date = date
         if let date = date {
+            isAccessibilityElement = true
+            accessibilityElementsHidden = false
+            accessibilityTraits = [.button]
+            
             if date < data.minDate || date > data.maxDate {
                 self.state = .disabled
             } else if date == data.selectedDate {
                 self.state = .selected
+                accessibilityTraits = [.button, .selected]
             } else {
                 self.state = .enabled
             }
         } else {
             self.state = .none
+            accessibilityElementsHidden = true
         }
-        accessibilityLabel = "You selected: \(date?.day), \(date?.month)"
         updateUI()
     }
     
@@ -112,6 +115,14 @@ class CalendarDayCell: UICollectionViewCell, CalendarDay {
         view.isHidden = state != .selected
         dateLabel.text = state == .none ? " " : "\(date?.day ?? 0)"
         dateLabel.font = state == .selected ? .systemFont(ofSize: 20, weight: .semibold) : .systemFont(ofSize: 20)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.current
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.dateFormat = "EEEE, d MMMM"
+        if let date = date?.toDate() {
+            accessibilityLabel = dateFormatter.string(from: date)
+        }
     }
     
 }

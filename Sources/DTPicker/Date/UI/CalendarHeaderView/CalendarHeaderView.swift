@@ -37,6 +37,7 @@ class CalendarHeaderView: UIView, CalendarHeader {
         super.init(frame: .zero)
         
         commonInit()
+        showYearPickerView.isAccessibilityElement = true
     }
     
     required init?(coder: NSCoder) {
