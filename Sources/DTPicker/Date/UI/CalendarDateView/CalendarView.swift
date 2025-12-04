@@ -74,6 +74,7 @@ class CalendarView: UIView, DPCalendar {
     
     func scrollToMonth(_ date: CDate, animated: Bool = true) {
         guard let ip = indexPath(for: date) else { return }
+        guard collectionView.numberOfItems(inSection: 0) > ip.item else { return }
         collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: animated)
         mediator?.didChangeMonth(date)
     }
